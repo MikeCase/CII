@@ -12,6 +12,7 @@ do
 					unzip CodeIgniter_${LATEST_VERSION}.zip -d ${APPNAME}
 					mv ${APPNAME}/CodeIgniter_${LATEST_VERSION}/* ${APPNAME}
 					rm -rf ${APPNAME}/CodeIgniter_${LATEST_VERSION}/
+					rm -rf CodeIgniter_${LATEST_VERSION}.zip
 					exit
 					;;
 		"install version")
@@ -27,6 +28,7 @@ do
 					unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
 					mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
 					rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
+					rm -rf CodeIgniter_${VERSION}.zip
 					exit
 					;;
 		"install w/sparks")
@@ -48,6 +50,7 @@ do
 						unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
 						mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
 						rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
+						rm -rf CodeIgniter_${VERSION}.zip
 						cd ${APPNAME}/ && php -r "$(curl -fsSL http://getsparks.org/go-sparks)"
 						for SPARK in "${SPARKS[@]}"
 						do
@@ -59,6 +62,7 @@ do
 						unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
 						mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
 						rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
+						rm -rf CodeIgniter_${VERSION}.zip
 						cd ${APPNAME}/ && php -r "$(curl -fsSL http://getsparks.org/go-sparks)"
 					else
 						echo "That is an invalid response!"
