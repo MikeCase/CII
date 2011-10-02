@@ -20,7 +20,7 @@ do
 					read APPNAME
 					echo "What version do you want to install? " 
 					read VERSION
-					if [ $VERSION == "" -o $VERSION == "latest" ]; then
+					if [["$VERSION" == "" || "$VERSION" == "latest" ]]; then
 						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
 					fi
 					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
@@ -37,7 +37,7 @@ do
 					read VERSION
 					echo "Would you like to install sparks now?"
 					read YESNO
-					if [ $VERSION == "" -o $VERSION == "latest" ]; then
+					if [[ "$VERSION" == "" || "$VERSION" == "latest" ]]; then
 						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
 					fi
 					if [ $YESNO == "yes" ]; then
