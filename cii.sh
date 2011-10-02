@@ -21,7 +21,7 @@ do
 					read APPNAME
 					echo "What version do you want to install? " 
 					read VERSION
-					if [["$VERSION" == "" || "$VERSION" == "latest" ]]; then
+					if [[ "$VERSION" == "" || "$VERSION" == "latest" ]]; then
 						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
 					fi
 					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
