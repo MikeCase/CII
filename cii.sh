@@ -1,5 +1,4 @@
 #!/bin/bash
-
 PS3="Your choice? "
 select OPTION in install "install version" "install w/sparks" quit
 do
@@ -8,10 +7,11 @@ do
 					clear
 					echo "What is the name of your app? "
 					read APPNAME
-					wget http://downloads.codeigniter.com/reactor/CodeIgniter_2.0.3.zip
-					unzip CodeIgniter_2.0.3.zip -d ${APPNAME}
-					mv ${APPNAME}/CodeIgniter_2.0.3/* ${APPNAME}
-					rm -rf ${APPNAME}/CodeIgniter_2.0.3/
+					LATEST_VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
+					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${LATEST_VERSION}.zip
+					unzip CodeIgniter_${LATEST_VERSION}.zip -d ${APPNAME}
+					mv ${APPNAME}/CodeIgniter_${LATEST_VERSION}/* ${APPNAME}
+					rm -rf ${APPNAME}/CodeIgniter_${LATEST_VERSION}/
 					exit
 					;;
 		"install version")
@@ -20,6 +20,9 @@ do
 					read APPNAME
 					echo "What version do you want to install? " 
 					read VERSION
+					if [ $VERSION == "" -o $VERSION == "latest" ]; then
+						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
+					fi
 					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
 					unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
 					mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
@@ -34,6 +37,9 @@ do
 					read VERSION
 					echo "Would you like to install sparks now?"
 					read YESNO
+					if [ $VERSION == "" -o $VERSION == "latest" ]; then
+						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
+					fi
 					if [ $YESNO == "yes" ]; then
 						declare -a SPARKS
 						echo "What sparks would you like to install (space seperated list)"
