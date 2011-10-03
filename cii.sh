@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#sed "s_\$config\['base\_url'\]\s*= 'http://192.168.1.124/tutor/';_\$config\['base\_url'\] = 'http://localhost/tutor/';_" config.php > newconfig.php
-
+#Define functions...
 install_cii(){
 	#Arguments will follow this format APPNAME = $1 VERSION = $2
 	wget http://downloads.codeigniter.com/reactor/CodeIgniter_${2}.zip
@@ -15,6 +14,7 @@ setup_ci(){
 	`exec sed "s_\$config\['base\_url'\]\s*= '';_\$config\['base\_url'\] = '${2}';_" ${1}/application/config/config.php > ${1}/application/config/testconfig.php`
 	`exec mv ${1}/application/config/testconfig.php ${1}/application/config/config.php`
 }
+#Finished with functions....
 
 PS3="Your choice? "
 select OPTION in install "install version" "install w/sparks" quit
