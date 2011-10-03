@@ -1,4 +1,21 @@
 #!/bin/bash
+
+#sed "s_\$config\['base\_url'\]\s*= 'http://192.168.1.124/tutor/';_\$config\['base\_url'\] = 'http://localhost/tutor/';_" config.php > newconfig.php
+
+install_cii(){
+	#Arguments will follow this format APPNAME = $1 VERSION = $2
+	wget http://downloads.codeigniter.com/reactor/CodeIgniter_${2}.zip
+	unzip CodeIgniter_${2}.zip -d ${1}
+	mv ${1}/CodeIgniter_${2}/* ${1}
+	rm -rf ${1}/CodeIgniter_${2}/
+	rm -rf CodeIgniter_${2}.zip
+}
+setup_ci(){
+	#arguments will follow this pattern $1 = APPNAME $2 = URL_BASE
+	`exec sed "s_\$config\['base\_url'\]\s*= '';_\$config\['base\_url'\] = '${2}';_" ${1}/application/config/config.php > ${1}/application/config/testconfig.php`
+	`exec mv ${1}/application/config/testconfig.php ${1}/application/config/config.php`
+}
+
 PS3="Your choice? "
 select OPTION in install "install version" "install w/sparks" quit
 do
@@ -8,11 +25,12 @@ do
 					echo "What is the name of your app? "
 					read APPNAME
 					LATEST_VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
-					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${LATEST_VERSION}.zip
-					unzip CodeIgniter_${LATEST_VERSION}.zip -d ${APPNAME}
-					mv ${APPNAME}/CodeIgniter_${LATEST_VERSION}/* ${APPNAME}
-					rm -rf ${APPNAME}/CodeIgniter_${LATEST_VERSION}/
-					rm -rf CodeIgniter_${LATEST_VERSION}.zip
+					install_cii ${APPNAME} ${LATEST_VERSION}
+					#get info for setup..
+					clear
+					echo "What is your URL Base? Typically this will be your CodeIgniter root.."
+					read URL_BASE
+					setup_ci ${APPNAME} ${URL_BASE} 
 					exit
 					;;
 		"install version")
@@ -24,11 +42,11 @@ do
 					if [[ "$VERSION" == "" || "$VERSION" == "latest" ]]; then
 						VERSION=`exec wget -q -O - http://versions.ellislab.com/codeigniter_version.txt`
 					fi
-					wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
-					unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
-					mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
-					rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
-					rm -rf CodeIgniter_${VERSION}.zip
+					install_cii ${APPNAME} ${VERSION}
+					clear
+					echo "What is your URL Base? Typically this will be your CodeIgniter root.."
+					read URL_BASE
+					setup_ci ${APPNAME} ${URL_BASE}					
 					exit
 					;;
 		"install w/sparks")
@@ -46,24 +64,25 @@ do
 						declare -a SPARKS
 						echo "What sparks would you like to install (space seperated list)"
 						read -a SPARKS
-						wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
-						unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
-						mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
-						rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
-						rm -rf CodeIgniter_${VERSION}.zip
+						install_cii ${APPNAME} ${VERSION} 
 						cd ${APPNAME}/ && php -r "$(curl -fsSL http://getsparks.org/go-sparks)"
 						for SPARK in "${SPARKS[@]}"
 						do
 							php tools/spark install ${SPARK}
 						done
-
+						cd ../
+						clear
+						echo "What is your URL Base? Typically this will be your CodeIgniter root.."
+						read URL_BASE
+						setup_ci ${APPNAME} ${URL_BASE}	
 					elif [ $YESNO == "no" ]; then
-						wget http://downloads.codeigniter.com/reactor/CodeIgniter_${VERSION}.zip
-						unzip CodeIgniter_${VERSION}.zip -d ${APPNAME}
-						mv ${APPNAME}/CodeIgniter_${VERSION}/* ${APPNAME}
-						rm -rf ${APPNAME}/CodeIgniter_${VERSION}/
-						rm -rf CodeIgniter_${VERSION}.zip
+						install_cii ${APPNAME} ${VERSION} 
 						cd ${APPNAME}/ && php -r "$(curl -fsSL http://getsparks.org/go-sparks)"
+						cd ../
+						clear
+						echo "What is your URL Base? Typically this will be your CodeIgniter root.."
+						read URL_BASE
+						setup_ci ${APPNAME} ${URL_BASE}	
 					else
 						echo "That is an invalid response!"
 						
